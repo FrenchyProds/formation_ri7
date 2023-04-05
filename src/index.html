@@ -7,9 +7,8 @@
         <meta name="description" content="">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="../assets/css/style.scss">
+        <link type="text/css" href="/../assets/css/style.scss">
         <script src="https://kit.fontawesome.com/c838d79e10.js" crossorigin="anonymous"></script>
-        <script src="../src/components/Tabs.js" type="text/javascript" defer></script>
     </head>
     <body>
         <section class="section">
@@ -25,7 +24,7 @@
                             <div class="column is-full">
                                 <div class="field has-addons">
                                     <div class="control is-flex-grow-3 has-icons-left searchbar-container">
-                                        <input class="input" id="search-bar" type="text" name="search-bar" placeholder="Chercher une adresse..." />
+                                        <input class="input" id="search-bar" type="text" name="search-bar" autocomplete="off" placeholder="Chercher une adresse..." />
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-search"></i>
                                         </span>
@@ -58,8 +57,7 @@
                 </footer>
               </div>
         </div>
-
         
-        <script type="module" src="../src/index.js" async defer></script>
+        <script type="module" src="/main.js" async defer></script>
     </body>
 </html>

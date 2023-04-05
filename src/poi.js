@@ -1,7 +1,8 @@
 import errorTemplate from './modules/errorTemplate.mjs'
+import Tabs from '../src/components/Tabs.js'
+import Swal from 'sweetalert2'
 
 window.onload = () => {
-
     const card = document.getElementById('card-container')
 
     let storedPoi
@@ -25,7 +26,7 @@ window.onload = () => {
                         <p class="is-size-5">${description}</p>
                     </div>
                     <div class="place-recap">
-                        <p class="m-0">${housenumber || "#"} ${street || "rue"}, ${citycode || "code postal"}, ${city || "ville"}</p>
+                        <p class="m-0">${housenumber || ""} ${street || "rue"}, ${citycode || "code postal"}, ${city || "ville"}</p>
                     </div>
                 </div>
             </div>
@@ -45,11 +46,24 @@ window.onload = () => {
 
     deletePoiButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const item = storedPoi.find(poi => poi.id === button.dataset.id)
-            const updatedPoi = storedPoi.filter(poi => poi.id !== item.id)
-            console.log(storedPoi)
-            localStorage.setItem('poi', JSON.stringify(updatedPoi))
-            location.reload()
+            Swal.fire({
+                title: 'Êtes vous sûr ?',
+                text: "Cette action est irréversible !",
+                icon: 'warning',
+                confirmButtonText: 'Confirmer',
+                cancelButtonText: 'Annuler',
+                showCancelButton: true,
+              }).then(result => {
+                if(result.isConfirmed) {
+                    const item = storedPoi.find(poi => poi.id === button.dataset.id)
+                    const updatedPoi = storedPoi.filter(poi => poi.id !== item.id)
+                    console.log(storedPoi)
+                    localStorage.setItem('poi', JSON.stringify(updatedPoi))
+                    location.reload()
+                }
+              })
+              
+            
         })
     })
 

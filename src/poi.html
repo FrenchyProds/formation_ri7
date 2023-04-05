@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>TD #1</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../assets/css/style.scss">
+        <script src="https://kit.fontawesome.com/c838d79e10.js" crossorigin="anonymous"></script>
+        <script src="../src/components/Tabs.js" type="text/javascript" defer></script>
+    </head>
+    <body>
+
+        <section class="section">
+            <div class="columns">
+                <div class="container is-fluid">
+                    <tabs-component></tabs-component>
+
+                    <div class="poi-page">
+                        <div class="container is-flex is-justify-content-center  is-fluid m-3">
+                            <h3 class="title is-3">Centres d'intérêt</h3>
+                        </div>
+                    </div>  
+
+                    <div class="columns is-flex-wrap-wrap" id="card-container">
+                    </div>
+                
+                </div>
+            </div>
+        </section>
+        
+        <script type="module" src="../src/poi.js" async defer></script>
+    </body>
+</html>

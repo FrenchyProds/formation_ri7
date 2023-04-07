@@ -6,10 +6,14 @@ const isProduction = process.env.NODE_ENV == "production";
 const stylesHandler = "style-loader";
 
 const config = {
-  entry: {main: path.resolve(__dirname, "src/index.js"), poi: path.resolve(__dirname, "src/poi.js")},
+  entry: {
+    main: path.resolve(__dirname, "src/index.js"),
+    poi: path.resolve(__dirname, "src/poi.js"),
+    geoloc: path.resolve(__dirname, "src/geoloc.js")
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "[name].js",
+    filename: "[name].bundle.js",
     clean: true,
     publicPath:'/'
   },
@@ -24,28 +28,29 @@ const config = {
     sideEffects: true
   },
   plugins: [
+    // new HtmlWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: './src/index.html',
-      // chunks: ['index']
+      template: path.resolve(__dirname, 'src/index.html'),
+      chunks: ['main']
     }),
     new HtmlWebpackPlugin({
       filename: 'poi.html',
-      template: './src/poi.html',
-      // chunks: ['poi']
-  })
+      template: path.resolve(__dirname, 'src/poi.html'),
+      chunks: ['poi']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'geoloc.html',
+      template: path.resolve(__dirname, 'src/geoloc.html'),
+      chunks: ['geoloc']
+    }),
   ],
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/i,
-        loader: "babel-loader",
-        options: {
-          presets: [
-            ['@babel/preset-env', { targets: "defaults" }]
-          ],
-          plugins: ['@babel/plugin-proposal-class-properties']
-        }
+        exclude: "/node_modules",
+        use: ['babel-loader'],
       },
       {
         test: /\.s[ac]ss$/i,

@@ -3,6 +3,7 @@ import {openModal, closeModal, initModals} from "./modules/modal.mjs"
 import errorTemplate from './modules/errorTemplate.mjs'
 import loadingTemplate from './modules/loadingTemplate.mjs'
 import Tabs from '../src/components/Tabs.js'
+import style from '../assets/css/style.scss'
 import axios from "axios"
 import Swal from 'sweetalert2'
 
@@ -32,15 +33,17 @@ window.onload = () => {
         try {
            await axios(`https://api-adresse.data.gouv.fr/search/?q=${sluggedText}&limit=15`).then(res => {
                 const data = res.data.features
-                let results = []
+                const results = []
                 let loading = true
                 data.forEach(item => {
                     const {label, city, context} = item.properties
                     if (slugify(label).includes(sluggedText) || slugify(city).includes(sluggedText) || slugify(context).includes(sluggedText)) {
-                        results.push(item.properties)
+                        results.push(item)
                         return results
                     }
                 })
+
+                
 
                 if (results.length === 0 && searchContent.length >= 3) { 
                     card.innerHTML = errorTemplate(
@@ -55,17 +58,17 @@ window.onload = () => {
                 }
                 
                 setTimeout(() => results.forEach(res => {
-                    const {label, city, context, id} = res
+                    const {label, city, context, id} = res.properties
                     if (document.getElementById(`container${id}`)) return
                     card.innerHTML += 
                     `
-                    <div class="column is-4 is-flex-wrap-wrap">
-                        <div class="card" id="container${id}">
-                            <header class="card-header" background-color="blue">
-                                <p class="card-header-title">${label}</p>
+                    <div class="column is-4 is-flex is-flex-wrap-wrap">
+                        <div class="card is-flex is-flex-direction-column is-justify-content-space-between is-flex-grow-1" id="container${id}">
+                            <header class="card-header has-background-link">
+                                <p class="card-header-title has-text-white capitalize">${label}</p>
                             </header>
                             <div class="card-content">
-                                <div class="content">
+                                <div class="content capitalize">
                                     <p>Ville : ${city}</p>
                                     <p>Département : ${context}</p>
                                 </div>
@@ -90,7 +93,8 @@ window.onload = () => {
 
                     openModalButtons.forEach(openModalButton => {
                         openModalButton.addEventListener("click", () => {
-                            const item = results.find(item => item.id === openModalButton.dataset.target)
+                            const item = results.find(item => item.properties.id === openModalButton.dataset.target)
+                            const {properties} = item
                             localStorage.setItem('search', JSON.stringify(item))
                             const modalTarget = document.getElementById("modal-container")
                             modalTarget.id = "modal-container " + openModalButton.dataset.target
@@ -99,7 +103,7 @@ window.onload = () => {
                             modalTitle.innerHTML = "Ajouter un point d'intérêt"
                             modalContent.innerHTML = `
                             <div class="my-3">
-                                <p class="title is-5">Adresse : ${item.name}, ${item.context}</p>
+                                <p class="title is-5 capitalize">Adresse : ${properties.housenumber || ""} ${properties.street || ""}, ${properties.citycode || "code postal"}, ${properties.city || "ville"}</p>
                             </div>
                             <div class="field">
                                 <label class="label">Nom</label>
@@ -139,17 +143,35 @@ window.onload = () => {
                                     ? JSON.parse(localStorage.getItem('poi'))
                                     : []
 
-                                const filteredArray = getPOI.filter(poi => poi.id !== item.id) || []
+                                const userPosition = {}
 
-                                filteredArray.push({...item, 'name': name.value, 'description': description.value, 'id': item.id})
-                        
-                                localStorage.setItem('poi', JSON.stringify(filteredArray))
-                                Swal.fire({
-                                    title: 'Point d\'intérêt crée',
-                                    text: 'Votre point d\'intérêt a bien été crée',
-                                    icon: 'success',
-                                })
-                                closeModal(modalTarget)
+                                const successCallback = async (position) => {
+                                    if(position.coords.latitude && position.coords.longitude) {
+                                        userPosition.lat = await position.coords.latitude,
+                                        userPosition.lng = await position.coords.longitude
+                                        const filteredArray = getPOI.filter(poi => poi.properties.id === item.id) || []
+
+                                        console.log(filteredArray)
+
+                                        filteredArray.push({...item, 'name': name.value, 'description': description.value, 'id': item.id, userPosition})
+                                
+                                        localStorage.setItem('poi', JSON.stringify(filteredArray))
+                                        Swal.fire({
+                                            title: 'Point d\'intérêt crée',
+                                            text: 'Votre point d\'intérêt a bien été crée',
+                                            icon: 'success',
+                                        })
+                                        closeModal(modalTarget)
+                                    }
+                                }
+                                    
+                                const errorCallback = (error) => {
+                                console.log(error);
+                                };
+                                
+                                
+                                navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+
                             })
                         });
                     })

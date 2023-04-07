@@ -1,7 +1,17 @@
+$danger: #d32f2f;
+
+@import "~bulma/bulma";
+@import "~bulma-switch";
+
 .field.has-addons .control .searchbar-container {
     width: 100%;
 }
 
-body {
-    background-color: pink;
+.capitalize {
+    text-transform: capitalize;
+}
+
+.map { 
+    height: 20vw; 
+    width: 20vw;
 }

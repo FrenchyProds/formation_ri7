@@ -9,7 +9,7 @@ window.onload = () => {
     const storedPoi = JSON.parse(localStorage.getItem("poi")) ? JSON.parse(localStorage.getItem("poi")) : []
 
     if (storedPoi.length === 0) {
-        card.innerHTML = errorTemplate('<p>Il n\'y a aucun centre d\'intérêt pour l\'instant, vous pouvez en créer un sur <a href="../src/index.html">cet onglet</a></p>')
+        card.innerHTML = errorTemplate('<p>Il n\'y a aucun centre d\'intérêt pour l\'instant, vous pouvez en créer un sur <a href="index.html">cet onglet</a></p>')
     }
     
     storedPoi.forEach(poi => {

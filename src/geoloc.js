@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import haversine from 'haversine-distance'
 
 window.onload = () => {
+    
 
     const card = document.getElementById('card-container')
 
@@ -13,6 +14,11 @@ window.onload = () => {
     : []
 
     const sortedPoi = []
+
+    if (storedPoi.length === 0) {
+        card.innerHTML = errorTemplate('<p>Il n\'y a aucun centre d\'intérêt pour l\'instant, vous pouvez en créer un sur <a href="index.html">cet onglet</a></p>')
+    }
+    
 
     let userPos
 
@@ -74,17 +80,18 @@ window.onload = () => {
 
     
 
-    const switchButton = document.querySelector('#switchToImage')
-    switchButton.addEventListener('click', event => {
-        console.log(event)
-        if (event.target.checked) {
-            // checked = false
-            console.log("not checked")
-        } else {
-            // checked = true
-            console.log("checked")
-        }
-    })
+    // const switchButton = document.querySelector('#switchToImage')
+    // const mapLabel = document.querySelector('.map-label')
+    // const photoLabel = document.querySelector('.photo-label')
+    // switchButton.addEventListener('click', event => {
+    //     if (event.target.checked) {
+    //         mapLabel.style.display = 'none'
+    //         photoLabel.style.display = 'block'
+    //     } else {
+    //         mapLabel.style.display = 'block'
+    //         photoLabel.style.display = 'none'
+    //     }
+    // })
 
     const maps = document.querySelectorAll('.map')
         maps.forEach(item => {

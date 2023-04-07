@@ -103,7 +103,7 @@ window.onload = () => {
                             modalTitle.innerHTML = "Ajouter un point d'intérêt"
                             modalContent.innerHTML = `
                             <div class="my-3">
-                                <p class="title is-5 capitalize">Adresse : ${properties.housenumber || ""} ${properties.street || ""}, ${properties.citycode || "code postal"}, ${properties.city || "ville"}</p>
+                                <p class="title is-5 capitalize">Adresse : ${properties.label || ""}</p>
                             </div>
                             <div class="field">
                                 <label class="label">Nom</label>
@@ -149,11 +149,9 @@ window.onload = () => {
                                     if(position.coords.latitude && position.coords.longitude) {
                                         userPosition.lat = await position.coords.latitude,
                                         userPosition.lng = await position.coords.longitude
-                                        const filteredArray = getPOI.filter(poi => poi.properties.id === item.id) || []
+                                        const filteredArray = getPOI.filter(poi => poi.properties.id !== item.properties.id) || []
 
-                                        console.log(filteredArray)
-
-                                        filteredArray.push({...item, 'name': name.value, 'description': description.value, 'id': item.id, userPosition})
+                                        filteredArray.push({...item, 'name': name.value, 'description': description.value, 'id': item.properties.id, userPosition})
                                 
                                         localStorage.setItem('poi', JSON.stringify(filteredArray))
                                         Swal.fire({
